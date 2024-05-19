@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
         return createUser(userRequest);
     }
 
+    @Transactional
     @Override
-    @Transactional(readOnly = true)
     public boolean userExistByEmail(String email) {
         return userRepository.existsByEmail(email);
     }

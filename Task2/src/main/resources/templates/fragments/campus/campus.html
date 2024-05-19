@@ -1,0 +1,10 @@
+<tr th:fragment="campusFragment (campus)">
+  <th scope="row" th:text="${campus.id}"></th>
+  <td th:text="${campus.name}"></td>
+  <td th:text="${campus.location}"></td>
+  <td th:text="${campus.createdAt}"></td>
+  <td th:text="${campus.updatedAt}"></td>
+  <td th:text="${campus.createdBy}"></td>
+  <td><button type="button" class="btn btn-outline-primary">Edit</button></td>
+  <td><button type="button" class="btn btn-danger">Delete</button></td>
+</tr>

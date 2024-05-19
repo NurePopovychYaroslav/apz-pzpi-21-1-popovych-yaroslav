@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/v1.0.0/v1.0.0_202405191612_create_user_account_table.yaml

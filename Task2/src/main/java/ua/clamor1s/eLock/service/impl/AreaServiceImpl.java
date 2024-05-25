@@ -46,6 +46,28 @@ public class AreaServiceImpl implements AreaService {
         return area;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Area getAreaById(Long areaId) {
+        return areaRepository.findById(areaId).orElseThrow(() -> new RuntimeException());
+    }
+
+    @Transactional
+    @Override
+    public Area updateAreaByAreaRequest(Area area, AreaRequest areaRequest) {
+        areaMapper.updateAreByAreaRequest(area, areaRequest);
+        return areaRepository.save(area);
+    }
+
+    @Transactional
+    @Override
+    public Area deleteArea(Area area) {
+        Campus campus = area.getCampus();
+        areaRepository.delete(area);
+        campus.removeArea(area);
+        return area;
+    }
+
     @Override
     public AreaResponse convertAreaToAreaResponse(Area area) {
         return areaMapper.mapAreaToAreaResponse(area);

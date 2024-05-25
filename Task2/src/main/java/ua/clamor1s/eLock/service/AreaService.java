@@ -13,4 +13,10 @@ public interface AreaService {
     AreaResponse convertAreaToAreaResponse(Area area);
 
     Area createArea(Campus campus, AreaRequest areaRequest);
+
+    Area getAreaById(Long areaId);
+
+    Area updateAreaByAreaRequest(Area area, AreaRequest areaRequest);
+
+    Area deleteArea(Area area);
 }

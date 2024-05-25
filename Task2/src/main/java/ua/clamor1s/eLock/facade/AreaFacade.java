@@ -9,4 +9,8 @@ public interface AreaFacade {
     List<AreaResponse> getAllByCampusId(Long campusId);
 
     AreaResponse createArea(Long campusId, AreaRequest areaRequest);
+
+    AreaResponse updateArea(Long campusId, Long areaId, AreaRequest areaRequest);
+
+    AreaResponse deleteAreaById(Long campusId, Long areaId);
 }

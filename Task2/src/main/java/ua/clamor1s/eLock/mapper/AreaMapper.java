@@ -4,6 +4,7 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import ua.clamor1s.eLock.dto.request.AreaRequest;
 import ua.clamor1s.eLock.dto.response.AreaResponse;
 import ua.clamor1s.eLock.entity.Area;
@@ -15,4 +16,6 @@ public interface AreaMapper extends CreatableUpdatableMapper<Area> {
 
     @BeanMapping(builder = @Builder(disableBuilder = true))
     Area areaRequestToArea(AreaRequest areaRequest);
+
+    void updateAreByAreaRequest(@MappingTarget Area area, AreaRequest areaRequest);
 }

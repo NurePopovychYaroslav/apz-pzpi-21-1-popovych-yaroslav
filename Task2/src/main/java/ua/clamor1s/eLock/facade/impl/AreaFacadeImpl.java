@@ -37,4 +37,22 @@ public class AreaFacadeImpl implements AreaFacade {
         Area area = areaService.createArea(campus, areaRequest);
         return areaService.convertAreaToAreaResponse(area);
     }
+
+    @Transactional
+    @Override
+    public AreaResponse updateArea(Long campusId, Long areaId, AreaRequest areaRequest) {
+        Area area = areaService.getAreaById(areaId);
+//        TODO check area and campus ids
+        areaService.updateAreaByAreaRequest(area, areaRequest);
+        return areaService.convertAreaToAreaResponse(area);
+    }
+
+    @Transactional
+    @Override
+    public AreaResponse deleteAreaById(Long campusId, Long areaId) {
+        Area area = areaService.getAreaById(areaId);
+//        TODO check area and campus ids and by user
+        area = areaService.deleteArea(area);
+        return areaService.convertAreaToAreaResponse(area);
+    }
 }

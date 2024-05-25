@@ -42,13 +42,19 @@ public class CampusServiceImpl implements CampusService {
     public Campus getCampusById(Long id) {
         var campus = campusRepository.findById(id).orElseThrow(() -> new RuntimeException());
         User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
-//        TODO add check for being correct user
+        if (!campus.getCreatedBy().equals(user.getEmail())) {
+            throw new RuntimeException();
+        }
         return campus;
     }
 
     @Transactional
     @Override
     public Campus updateCampusByCampusRequest(Campus campus, CampusRequest campusRequest) {
+        User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
+        if (!campus.getCreatedBy().equals(user.getEmail())) {
+            throw new RuntimeException();
+        }
         campusMapper.updateCampusByCampusRequest(campus, campusRequest);
         return campusRepository.save(campus);
     }
@@ -56,6 +62,10 @@ public class CampusServiceImpl implements CampusService {
     @Transactional
     @Override
     public Campus deleteCampus(Campus campus) {
+        User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
+        if (!campus.getCreatedBy().equals(user.getEmail())) {
+            throw new RuntimeException();
+        }
         campusRepository.delete(campus);
         return campus;
     }

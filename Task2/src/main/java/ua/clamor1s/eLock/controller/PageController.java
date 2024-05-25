@@ -22,4 +22,9 @@ public class PageController {
     public String index() {
         return "index";
     }
+
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
 }

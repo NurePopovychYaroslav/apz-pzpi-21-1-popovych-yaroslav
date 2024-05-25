@@ -12,4 +12,10 @@ public interface CampusService {
     CampusResponse convertCampusToCampusResponse(Campus campus);
 
     List<Campus> getAllByCurrentUser();
+
+    Campus getCampusById(Long id);
+
+    Campus updateCampusByCampusRequest(Campus campus, CampusRequest campusRequest);
+
+    Campus deleteCampus(Campus campus);
 }

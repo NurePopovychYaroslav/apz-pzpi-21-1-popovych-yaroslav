@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/unauthenticated", "/oauth2/**", "/login/**", "/").permitAll()
+                        .requestMatchers("/unauthenticated", "/oauth2/**", "/login/**", "/", "/error").permitAll()
                         .anyRequest().fullyAuthenticated()
                 )
                 .logout(logout -> logout

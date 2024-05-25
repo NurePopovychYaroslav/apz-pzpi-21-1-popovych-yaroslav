@@ -28,6 +28,10 @@ public class AreaServiceImpl implements AreaService {
     @Transactional
     @Override
     public List<Area> getAreasByCampus(Campus campus) {
+        User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
+        if (!campus.getCreatedBy().equals(user.getEmail())) {
+            throw new RuntimeException();
+        }
         return campus.getAreas().stream()
                 .sorted((a1, a2) -> a2.getUpdatedAt().compareTo(a1.getUpdatedAt()))
                 .collect(Collectors.toList());
@@ -37,7 +41,9 @@ public class AreaServiceImpl implements AreaService {
     @Override
     public Area createArea(Campus campus, AreaRequest areaRequest) {
         User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
-//        TODO add check campus createdBy and user
+        if (!campus.getCreatedBy().equals(user.getEmail())) {
+            throw new RuntimeException();
+        }
         Area area = areaMapper.areaRequestToArea(areaRequest);
         area.setCreatedBy(user.getEmail());
         area.setCampus(campus);
@@ -49,12 +55,21 @@ public class AreaServiceImpl implements AreaService {
     @Transactional(readOnly = true)
     @Override
     public Area getAreaById(Long areaId) {
-        return areaRepository.findById(areaId).orElseThrow(() -> new RuntimeException());
+        Area area = areaRepository.findById(areaId).orElseThrow(() -> new RuntimeException());
+        User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
+        if (!area.getCreatedBy().equals(user.getEmail())) {
+            throw new RuntimeException();
+        }
+        return area;
     }
 
     @Transactional
     @Override
     public Area updateAreaByAreaRequest(Area area, AreaRequest areaRequest) {
+        User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
+        if (!area.getCreatedBy().equals(user.getEmail())) {
+            throw new RuntimeException();
+        }
         areaMapper.updateAreByAreaRequest(area, areaRequest);
         return areaRepository.save(area);
     }
@@ -62,6 +77,10 @@ public class AreaServiceImpl implements AreaService {
     @Transactional
     @Override
     public Area deleteArea(Area area) {
+        User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
+        if (!area.getCreatedBy().equals(user.getEmail())) {
+            throw new RuntimeException();
+        }
         Campus campus = area.getCampus();
         areaRepository.delete(area);
         campus.removeArea(area);

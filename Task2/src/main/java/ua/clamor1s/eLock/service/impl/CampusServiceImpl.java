@@ -34,7 +34,30 @@ public class CampusServiceImpl implements CampusService {
     @Override
     public List<Campus> getAllByCurrentUser() {
         User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
-        return campusRepository.findAllByCreatedBy(user.getEmail());
+        return campusRepository.findAllByCreatedByOrderByUpdatedAtDesc(user.getEmail());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Campus getCampusById(Long id) {
+        var campus = campusRepository.findById(id).orElseThrow(() -> new RuntimeException());
+        User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
+//        TODO add check for being correct user
+        return campus;
+    }
+
+    @Transactional
+    @Override
+    public Campus updateCampusByCampusRequest(Campus campus, CampusRequest campusRequest) {
+        campusMapper.updateCampusByCampusRequest(campus, campusRequest);
+        return campusRepository.save(campus);
+    }
+
+    @Transactional
+    @Override
+    public Campus deleteCampus(Campus campus) {
+        campusRepository.delete(campus);
+        return campus;
     }
 
     @Override

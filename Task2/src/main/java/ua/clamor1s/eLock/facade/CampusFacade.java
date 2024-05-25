@@ -9,4 +9,8 @@ public interface CampusFacade {
     CampusResponse createCampus(CampusRequest campusRequest);
 
     List<CampusResponse> getAllByCurrentUser();
+
+    CampusResponse updateCampus(Long id, CampusRequest campusRequest);
+
+    CampusResponse deleteCampus(Long id);
 }

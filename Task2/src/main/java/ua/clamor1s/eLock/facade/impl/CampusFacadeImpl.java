@@ -32,4 +32,20 @@ public class CampusFacadeImpl implements CampusFacade {
                 .map(campusService::convertCampusToCampusResponse)
                 .toList();
     }
+
+    @Transactional
+    @Override
+    public CampusResponse updateCampus(Long id, CampusRequest campusRequest) {
+        Campus campus = campusService.getCampusById(id);
+        campusService.updateCampusByCampusRequest(campus, campusRequest);
+        return campusService.convertCampusToCampusResponse(campus);
+    }
+
+    @Transactional
+    @Override
+    public CampusResponse deleteCampus(Long id) {
+        Campus campus = campusService.getCampusById(id);
+        campus = campusService.deleteCampus(campus);
+        return campusService.convertCampusToCampusResponse(campus);
+    }
 }

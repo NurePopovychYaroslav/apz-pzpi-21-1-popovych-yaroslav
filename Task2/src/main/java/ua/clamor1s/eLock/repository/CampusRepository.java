@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CampusRepository extends JpaRepository<Campus, Long> {
 
-    List<Campus> findAllByCreatedBy(String createdBy);
+    List<Campus> findAllByCreatedByOrderByUpdatedAtDesc(String createdBy);
 }

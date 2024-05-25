@@ -1,11 +1,14 @@
 package ua.clamor1s.eLock.entity;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -16,8 +19,6 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
 @Setter
 @Getter
 @SuperBuilder
@@ -25,32 +26,21 @@ import java.util.List;
 @ToString(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "campus")
-public class Campus extends AbstractEntity {
+@Table(name = "area")
+public class Area extends AbstractEntity {
     @Id
     @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "campus_id_seq")
-    @SequenceGenerator(name = "campus_id_seq", sequenceName = "campus_id_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "area_id_seq")
+    @SequenceGenerator(name = "area_id_seq", sequenceName = "area_id_seq", allocationSize = 1, initialValue = 1)
     Long id;
 
     @Column(nullable = false)
     String name;
 
-    String location;
-
-    @OneToMany(mappedBy = "campus")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "campus_id", nullable = false, updatable = false)
     @ToString.Exclude
-    List<Area> areas;
-
-    public void addArea(Area area) {
-        areas.add(area);
-        area.setCampus(this);
-    }
-
-    public void removeArea(Area area) {
-        areas.remove(area);
-        area.setCampus(null);
-    }
+    Campus campus;
 
     @Override
     public int hashCode() {
@@ -60,7 +50,7 @@ public class Campus extends AbstractEntity {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Campus)) return false;
-        return id != null && id.equals(((Campus) obj).getId());
+        if (!(obj instanceof Area)) return false;
+        return id != null && id.equals(((Area) obj).getId());
     }
 }

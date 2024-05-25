@@ -1,0 +1,12 @@
+package ua.clamor1s.eLock.facade;
+
+import ua.clamor1s.eLock.dto.request.AreaRequest;
+import ua.clamor1s.eLock.dto.response.AreaResponse;
+
+import java.util.List;
+
+public interface AreaFacade {
+    List<AreaResponse> getAllByCampusId(Long campusId);
+
+    AreaResponse createArea(Long campusId, AreaRequest areaRequest);
+}

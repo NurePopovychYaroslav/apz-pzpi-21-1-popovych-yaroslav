@@ -1,13 +1,11 @@
 <tr th:fragment="campusFragment (campus)">
     <th scope="row" th:text="${campus.id}"></th>
-    <!--  <td th:text="${campus.name}"></td>-->
     <td>
         <label for="campusName"></label>
         <input class="form-control"
                type="text"
                th:value="${campus.name}" id="campusName" th:name="name"/>
     </td>
-    <!--    <td th:text="${campus.location}"></td>-->
     <td>
         <label for="campusLocation"></label>
         <input class="form-control"

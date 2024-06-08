@@ -1,6 +1,5 @@
 package ua.clamor1s.eLock.entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -20,8 +18,6 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
 @Setter
 @Getter
 @SuperBuilder
@@ -29,29 +25,25 @@ import java.util.List;
 @ToString(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "area")
-public class Area extends AbstractEntity {
+@Table(name = "door")
+public class Door extends AbstractEntity {
     @Id
     @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "area_id_seq")
-    @SequenceGenerator(name = "area_id_seq", sequenceName = "area_id_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "door_id_seq")
+    @SequenceGenerator(name = "door_id_seq", sequenceName = "door_id_seq", allocationSize = 1, initialValue = 1)
     Long id;
 
-    @Column(nullable = false)
     String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "campus_id", nullable = false, updatable = false)
+    @JoinColumn(name = "area_from_id")
     @ToString.Exclude
-    Campus campus;
+    Area from;
 
-    @OneToMany(mappedBy = "from")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_to_id")
     @ToString.Exclude
-    List<Door> doorsFrom;
-
-    @OneToMany(mappedBy = "to")
-    @ToString.Exclude
-    List<Door> doorsTo;
+    Area to;
 
     @Override
     public int hashCode() {
@@ -61,7 +53,7 @@ public class Area extends AbstractEntity {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Area)) return false;
-        return id != null && id.equals(((Area) obj).getId());
+        if (!(obj instanceof Door)) return false;
+        return id != null && id.equals(((Door) obj).getId());
     }
 }

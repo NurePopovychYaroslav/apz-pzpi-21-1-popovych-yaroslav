@@ -30,4 +30,11 @@ public class AuthUtils {
                 .flatMap(user -> Optional.ofNullable(user).stream())
                 .findFirst();
     }
+
+    public void validateUser(String email) {
+        User user = getCurrentUser().orElseThrow(() -> new RuntimeException());
+        if (!email.equals(user.getEmail())) {
+            throw new RuntimeException();
+        }
+    }
 }

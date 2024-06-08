@@ -7,6 +7,11 @@
                th:value="${area.name}" id="areaName" th:name="name"/>
     </td>
 
+    <td>
+        <a th:href="@{/campus/{campusId}/area/{areaId}/door(campusId=${campusId},areaId=${area.id})}">
+            <button type="button" class="btn btn-outline-success">Open</button>
+        </a>
+    </td>
     <td th:text="${area.campusId}"></td>
     <td th:text="${area.createdAt}"></td>
     <td th:text="${area.updatedAt}"></td>

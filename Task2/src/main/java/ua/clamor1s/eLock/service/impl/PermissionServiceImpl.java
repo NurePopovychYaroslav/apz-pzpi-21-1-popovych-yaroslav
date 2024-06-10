@@ -31,7 +31,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public Permission createPermission(PermissionRequest permissionRequest) {
         Permission permission = permissionMapper.permissionRequestToPermission(permissionRequest);
-        User user = authUtils.getCurrentUser().orElseThrow(() -> new RuntimeException());
+        User user = authUtils.getCurrentUser().orElseThrow(RuntimeException::new);
         permission.setCreatedBy(user.getEmail());
         return permissionRepository.save(permission);
     }
@@ -39,7 +39,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Transactional(readOnly = true)
     @Override
     public Permission getById(Long permissionId) {
-        return permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException());
+        return permissionRepository.findById(permissionId).orElseThrow(RuntimeException::new);
     }
 
     @Transactional

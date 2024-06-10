@@ -3,13 +3,17 @@ package ua.clamor1s.eLock.facade.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ua.clamor1s.eLock.dto.request.DoorPermissionRequest;
 import ua.clamor1s.eLock.dto.request.DoorRequest;
+import ua.clamor1s.eLock.dto.response.DoorPermissionResponse;
 import ua.clamor1s.eLock.dto.response.DoorResponse;
 import ua.clamor1s.eLock.entity.Area;
 import ua.clamor1s.eLock.entity.Door;
+import ua.clamor1s.eLock.entity.Permission;
 import ua.clamor1s.eLock.facade.DoorFacade;
 import ua.clamor1s.eLock.service.AreaService;
 import ua.clamor1s.eLock.service.DoorService;
+import ua.clamor1s.eLock.service.PermissionService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +24,7 @@ public class DoorFacadeImpl implements DoorFacade {
 
     private final DoorService doorService;
     private final AreaService areaService;
+    private final PermissionService permissionService;
 
 
     @Override
@@ -66,5 +71,33 @@ public class DoorFacadeImpl implements DoorFacade {
         var response = doorService.convertDoorToDoorResponse(door);
         doorService.deleteDoor(door);
         return response;
+    }
+
+    @Override
+    @Transactional
+    public void addPermission(DoorPermissionRequest doorPermissionRequest) {
+        Door door = doorService.getDoorById(doorPermissionRequest.getDoorId());
+        Permission permission = permissionService.getById(doorPermissionRequest.getPermissionId());
+        doorService.addPermission(door, permission);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<DoorPermissionResponse> getDoorPermissions(Long areaId) {
+        Area area = areaService.getAreaById(areaId);
+        List<Door> doors = area.getDoorsFrom();
+
+        return doors.stream()
+                .flatMap(door -> doorService.getDoorPermissions(door).stream())
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public void deleteDoorPermission(Long doorId, Long permissionId) {
+        Door door = doorService.getDoorById(doorId);
+        Permission permission = permissionService.getById(permissionId);
+
+        doorService.deleteDoorPermission(door, permission);
     }
 }

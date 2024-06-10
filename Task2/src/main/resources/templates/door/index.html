@@ -11,5 +11,8 @@
     </div>
     <div id="door-form-container" th:insert="~{fragments/door/doorForm :: doorFormFragment (${areas})}"></div>
 
+    <div id="door-permission-form-container" th:insert="~{fragments/door/doorPermissionForm :: doorPermissionFormFragment(${fromDoors}, ${permissions})}"></div>
+    <div id="door-permission-list-container" th:insert="~{fragments/door/doorPermissions :: doorPermissionsFragment(${doorPermissions})}"></div>
+
 </body>
 </html>

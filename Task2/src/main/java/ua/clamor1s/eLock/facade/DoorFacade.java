@@ -1,6 +1,8 @@
 package ua.clamor1s.eLock.facade;
 
+import ua.clamor1s.eLock.dto.request.DoorPermissionRequest;
 import ua.clamor1s.eLock.dto.request.DoorRequest;
+import ua.clamor1s.eLock.dto.response.DoorPermissionResponse;
 import ua.clamor1s.eLock.dto.response.DoorResponse;
 
 import java.util.List;
@@ -15,4 +17,10 @@ public interface DoorFacade {
     DoorResponse updateDoor(Long doorId, DoorRequest doorRequest);
 
     DoorResponse deleteDoor(Long doorId);
+
+    void addPermission(DoorPermissionRequest doorPermissionRequest);
+
+    List<DoorPermissionResponse> getDoorPermissions(Long areaId);
+
+    void deleteDoorPermission(Long doorId, Long permissionId);
 }

@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.clamor1s.eLock.dto.request.DoorRequest;
+import ua.clamor1s.eLock.dto.response.DoorPermissionResponse;
 import ua.clamor1s.eLock.dto.response.DoorResponse;
 import ua.clamor1s.eLock.entity.Area;
 import ua.clamor1s.eLock.entity.Door;
+import ua.clamor1s.eLock.entity.Permission;
 import ua.clamor1s.eLock.entity.User;
 import ua.clamor1s.eLock.mapper.DoorMapper;
 import ua.clamor1s.eLock.repository.DoorRepository;
@@ -14,6 +16,7 @@ import ua.clamor1s.eLock.service.DoorService;
 import ua.clamor1s.eLock.utils.AuthUtils;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +71,29 @@ public class DoorServiceImpl implements DoorService {
     @Transactional
     public void deleteDoor(Door door) {
         doorRepository.delete(door);
+    }
+
+    @Override
+    @Transactional
+    public void addPermission(Door door, Permission permission) {
+        door.addPermission(permission);
+        doorRepository.save(door);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DoorPermissionResponse> getDoorPermissions(Door door) {
+        Set<Permission> permissions = door.getPermissions();
+        return permissions.stream()
+                .map(permission -> new DoorPermissionResponse(door.getId(), permission.getId()))
+                .toList();
+    }
+
+    @Transactional
+    @Override
+    public void deleteDoorPermission(Door door, Permission permission) {
+        door.removePermission(permission);
+        doorRepository.save(door);
     }
 
     @Override

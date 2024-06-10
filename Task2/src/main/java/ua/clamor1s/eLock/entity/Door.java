@@ -1,5 +1,6 @@
 package ua.clamor1s.eLock.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -7,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -17,6 +20,9 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -44,6 +50,27 @@ public class Door extends AbstractEntity {
     @JoinColumn(name = "area_to_id")
     @ToString.Exclude
     Area to;
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "door_permission",
+            joinColumns = @JoinColumn(name = "door_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    @ToString.Exclude
+    Set<Permission> permissions = new HashSet<>();
+
+    public void addPermission(Permission permission) {
+        permissions.add(permission);
+        permission.getDoors().add(this);
+    }
+
+    public void removePermission(Permission permission) {
+        permissions.remove(permission);
+        permission.getDoors().remove(this);
+    }
 
     @Override
     public int hashCode() {

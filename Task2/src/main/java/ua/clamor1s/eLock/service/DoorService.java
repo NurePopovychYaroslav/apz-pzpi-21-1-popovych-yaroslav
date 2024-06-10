@@ -1,9 +1,11 @@
 package ua.clamor1s.eLock.service;
 
 import ua.clamor1s.eLock.dto.request.DoorRequest;
+import ua.clamor1s.eLock.dto.response.DoorPermissionResponse;
 import ua.clamor1s.eLock.dto.response.DoorResponse;
 import ua.clamor1s.eLock.entity.Area;
 import ua.clamor1s.eLock.entity.Door;
+import ua.clamor1s.eLock.entity.Permission;
 
 import java.util.List;
 
@@ -21,4 +23,10 @@ public interface DoorService {
     Door updateDoor(Door door, DoorRequest doorRequest, Area from, Area to);
 
     void deleteDoor(Door door);
+
+    void addPermission(Door door, Permission permission);
+
+    List<DoorPermissionResponse> getDoorPermissions(Door door);
+
+    void deleteDoorPermission(Door door, Permission permission);
 }

@@ -40,6 +40,10 @@ public class Permission extends AbstractEntity {
     @ToString.Exclude
     Set<Door> doors = new HashSet<>();
 
+    @ManyToMany(mappedBy = "permissions")
+    @ToString.Exclude
+    Set<Group> groups = new HashSet<>();
+
     @Override
     public int hashCode() {
         return getClass().hashCode();

@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changelog/v1.0.0/v1.0.0_202405261641_create_door_table.yaml
   - include:
       file: db/changelog/v1.0.0/v1.0.0_202406091314_create_permission_table.yaml
+  - include:
+      file: db/changelog/v1.0.0/v1.0.0_202406122319_create_group_table.yaml

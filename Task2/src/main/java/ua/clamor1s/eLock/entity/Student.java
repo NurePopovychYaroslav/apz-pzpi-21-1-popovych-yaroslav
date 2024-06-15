@@ -29,39 +29,41 @@ import java.util.Set;
 @ToString(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "groups")
-public class Group extends AbstractEntity {
+@Table(name = "student")
+public class Student extends AbstractEntity {
     @Id
     @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "groups_id_seq")
-    @SequenceGenerator(name = "groups_id_seq", sequenceName = "groups_id_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_id_seq")
+    @SequenceGenerator(name = "student_id_seq", sequenceName = "student_id_seq", allocationSize = 1, initialValue = 1)
     Long id;
 
-    String name;
+    @Column(name = "first_name")
+    String firstName;
+
+    @Column(name = "last_name")
+    String lastName;
+
+    String email;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
-    @JoinTable(name = "groups_permission",
-            joinColumns = @JoinColumn(name = "group_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    @JoinTable(name = "student_groups",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
     )
     @ToString.Exclude
-    Set<Permission> permissions = new HashSet<>();
+    Set<Group> groups = new HashSet<>();
 
-    @ManyToMany(mappedBy = "groups")
-    @ToString.Exclude
-    Set<Student> students = new HashSet<>();
-
-    public void addPermission(Permission permission) {
-        permissions.add(permission);
-        permission.getGroups().add(this);
+    public void addGroup(Group group) {
+        groups.add(group);
+        group.getStudents().add(this);
     }
 
-    public void removePermission(Permission permission) {
-        permissions.remove(permission);
-        permission.getGroups().remove(this);
+    public void removeGroup(Group group) {
+        groups.remove(group);
+        group.getStudents().remove(this);
     }
 
     @Override
@@ -72,7 +74,7 @@ public class Group extends AbstractEntity {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Group)) return false;
-        return id != null && id.equals(((Group) obj).getId());
+        if (!(obj instanceof Student)) return false;
+        return id != null && id.equals(((Student) obj).getId());
     }
 }

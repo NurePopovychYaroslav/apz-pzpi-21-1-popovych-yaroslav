@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ua.clamor1s.eLock.dto.request.StudentGroupRequest;
 import ua.clamor1s.eLock.dto.request.StudentRequest;
 import ua.clamor1s.eLock.dto.response.GroupResponse;
 import ua.clamor1s.eLock.dto.response.StudentGroupResponse;
@@ -36,6 +37,24 @@ public class StudentController {
         model.addAttribute("groups", groups);
         model.addAttribute("studentGroups", studentGroups);
         return "student/index";
+    }
+
+    @PostMapping("/group")
+    public String addGroup(@ModelAttribute("studentGroup") StudentGroupRequest studentGroupRequest,
+                           Model model) {
+        studentFacade.addGroup(studentGroupRequest);
+        List<StudentGroupResponse> studentGroups = studentFacade.getAllStudentGroups();
+        model.addAttribute("studentGroups", studentGroups);
+        return "fragments/student/studentGroups :: studentGroupsFragment";
+    }
+
+    @DeleteMapping("/{studentId}/group/{groupId}")
+    public String deleteGroup(@PathVariable Long studentId, @PathVariable Long groupId,
+                              Model model) {
+        studentFacade.removeGroup(studentId, groupId);
+        List<StudentGroupResponse> studentGroups = studentFacade.getAllStudentGroups();
+        model.addAttribute("studentGroups", studentGroups);
+        return "fragments/student/studentGroups :: studentGroupsFragment";
     }
 
     @PostMapping

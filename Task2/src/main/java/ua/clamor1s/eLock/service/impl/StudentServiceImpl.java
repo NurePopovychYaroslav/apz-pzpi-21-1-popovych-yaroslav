@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.clamor1s.eLock.dto.request.StudentRequest;
 import ua.clamor1s.eLock.dto.response.StudentGroupResponse;
 import ua.clamor1s.eLock.dto.response.StudentResponse;
+import ua.clamor1s.eLock.entity.Group;
 import ua.clamor1s.eLock.entity.Student;
 import ua.clamor1s.eLock.entity.User;
 import ua.clamor1s.eLock.mapper.StudentMapper;
@@ -65,6 +66,23 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(Student student) {
         studentRepository.delete(student);
+    }
+
+    @Transactional
+    @Override
+    public StudentGroupResponse addGroup(Student student, Group group) {
+        student.addGroup(group);
+        student = studentRepository.save(student);
+        return new StudentGroupResponse(student.getId(), group.getId());
+    }
+
+    @Transactional
+    @Override
+    public StudentGroupResponse removeGroup(Student student, Group group) {
+        StudentGroupResponse response = new StudentGroupResponse(student.getId(), group.getId());
+        student.removeGroup(group);
+        studentRepository.save(student);
+        return response;
     }
 
     @Override

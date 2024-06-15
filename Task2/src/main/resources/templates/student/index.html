@@ -8,8 +8,8 @@
   <div id="student-list-container" th:insert="~{fragments/student/students :: studentsFragment (${students})}"></div>
   <div id="student-form-container" th:insert="~{fragments/student/studentForm :: studentFormFragment}"></div>
 
-<!--  <div id="student-group-form-container" th:insert="~{fragments/student/studentGroupForm :: studentGroupFormFragment(${students}, ${groups})}"></div>-->
-<!--  <div id="student-group-list-container" th:insert="~{fragments/student/studentGroups :: studentGroupsFragment(${studentGroups})}"></div>-->
+  <div id="student-group-form-container" th:insert="~{fragments/student/studentGroupForm :: studentGroupFormFragment(${students}, ${groups})}"></div>
+  <div id="student-group-list-container" th:insert="~{fragments/student/studentGroups :: studentGroupsFragment(${studentGroups})}"></div>
 
 </body>
 </html>

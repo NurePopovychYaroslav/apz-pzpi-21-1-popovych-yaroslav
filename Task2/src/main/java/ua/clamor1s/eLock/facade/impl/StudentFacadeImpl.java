@@ -3,11 +3,14 @@ package ua.clamor1s.eLock.facade.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ua.clamor1s.eLock.dto.request.StudentGroupRequest;
 import ua.clamor1s.eLock.dto.request.StudentRequest;
 import ua.clamor1s.eLock.dto.response.StudentGroupResponse;
 import ua.clamor1s.eLock.dto.response.StudentResponse;
+import ua.clamor1s.eLock.entity.Group;
 import ua.clamor1s.eLock.entity.Student;
 import ua.clamor1s.eLock.facade.StudentFacade;
+import ua.clamor1s.eLock.service.GroupService;
 import ua.clamor1s.eLock.service.StudentService;
 
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 public class StudentFacadeImpl implements StudentFacade {
 
     private final StudentService studentService;
+    private final GroupService groupService;
 
     @Transactional(readOnly = true)
     @Override
@@ -59,5 +63,21 @@ public class StudentFacadeImpl implements StudentFacade {
         StudentResponse response = studentService.convertStudentToStudentResponse(student);
         studentService.deleteStudent(student);
         return response;
+    }
+
+    @Transactional
+    @Override
+    public StudentGroupResponse addGroup(StudentGroupRequest studentGroupRequest) {
+        Student student = studentService.getStudentById(studentGroupRequest.getStudentId());
+        Group group = groupService.getGroupById(studentGroupRequest.getGroupId());
+        return studentService.addGroup(student, group);
+    }
+
+    @Transactional
+    @Override
+    public StudentGroupResponse removeGroup(Long studentId, Long groupId) {
+        Student student = studentService.getStudentById(studentId);
+        Group group = groupService.getGroupById(groupId);
+        return studentService.removeGroup(student, group);
     }
 }

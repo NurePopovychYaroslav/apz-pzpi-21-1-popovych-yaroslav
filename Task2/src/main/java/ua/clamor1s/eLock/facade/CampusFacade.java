@@ -13,4 +13,6 @@ public interface CampusFacade {
     CampusResponse updateCampus(Long id, CampusRequest campusRequest);
 
     CampusResponse deleteCampus(Long id);
+
+    CampusResponse getById(Long campusId);
 }

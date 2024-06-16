@@ -48,4 +48,11 @@ public class CampusFacadeImpl implements CampusFacade {
         campus = campusService.deleteCampus(campus);
         return campusService.convertCampusToCampusResponse(campus);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public CampusResponse getById(Long campusId) {
+        Campus campus = campusService.getCampusById(campusId);
+        return campusService.convertCampusToCampusResponse(campus);
+    }
 }

@@ -73,4 +73,14 @@ public class AreaFacadeImpl implements AreaFacade {
                 .collect(Collectors.toSet());
         return doorService.getDoorsPath(areaFrom, areaTo, studentPermissions);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public AreaResponse getById(Long campusId, Long areaId) {
+        Area area = areaService.getAreaById(areaId);
+        if (!area.getCampus().getId().equals(campusId)) {
+            throw new RuntimeException();
+        }
+        return areaService.convertAreaToAreaResponse(area);
+    }
 }

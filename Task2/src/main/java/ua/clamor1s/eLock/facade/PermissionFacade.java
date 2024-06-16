@@ -13,4 +13,6 @@ public interface PermissionFacade {
     PermissionResponse updatePermission(Long permissionId, PermissionRequest permissionRequest);
 
     PermissionResponse deletePermission(Long permissionId);
+
+    PermissionResponse getById(Long permissionId);
 }

@@ -49,4 +49,11 @@ public class PermissionFacadeImpl implements PermissionFacade {
         permissionService.deletePermission(permission);
         return response;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PermissionResponse getById(Long permissionId) {
+        Permission permission = permissionService.getById(permissionId);
+        return permissionService.convertPermissionToPermissionResponse(permission);
+    }
 }

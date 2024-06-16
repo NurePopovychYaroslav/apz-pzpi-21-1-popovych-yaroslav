@@ -23,4 +23,6 @@ public interface StudentFacade {
     StudentGroupResponse removeGroup(Long studentId, Long groupId);
 
     boolean isDoorAvailable(Long doorId, Long studentId);
+
+    StudentResponse getById(Long studentId);
 }

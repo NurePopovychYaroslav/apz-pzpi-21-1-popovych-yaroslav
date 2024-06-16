@@ -101,4 +101,11 @@ public class StudentFacadeImpl implements StudentFacade {
                 .collect(Collectors.toSet());
         return studentPermissions.stream().anyMatch(doorPermissions::contains);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public StudentResponse getById(Long studentId) {
+        Student student = studentService.getStudentById(studentId);
+        return studentService.convertStudentToStudentResponse(student);
+    }
 }

@@ -13,4 +13,6 @@ public interface AreaFacade {
     AreaResponse updateArea(Long campusId, Long areaId, AreaRequest areaRequest);
 
     AreaResponse deleteAreaById(Long campusId, Long areaId);
+
+    List<AreaResponse> findPath(Long studentId, Long campusId, Long areaFromId, Long areaToId);
 }

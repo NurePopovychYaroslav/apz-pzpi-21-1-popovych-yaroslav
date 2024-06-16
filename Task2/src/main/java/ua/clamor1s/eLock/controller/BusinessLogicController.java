@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.clamor1s.eLock.dto.response.AreaResponse;
@@ -22,7 +23,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/logic")
-public class BusinessLoginController {
+public class BusinessLogicController {
 
     private final StudentFacade studentFacade;
     private final DoorFacade doorFacade;
@@ -48,6 +49,30 @@ public class BusinessLoginController {
         List<AreaResponse> areas = areaFacade.getAllByCampusId(campusId);
         model.addAttribute("areas", areas);
         return "fragments/logic/logicInputs :: areaDoorFormFragment";
+    }
+
+    @GetMapping("/area/path")
+    public String getAreaPathFrom(@RequestParam("campus") Long campusId, Model model) {
+        if (campusId.equals(-1L)) {
+            return "fragments/logic/logicPath :: emptyAreaDoorFormPathFragment";
+        }
+        List<AreaResponse> areas = areaFacade.getAllByCampusId(campusId);
+        model.addAttribute("areas", areas);
+        return "fragments/logic/logicPath :: areaDoorFormPathFragment";
+    }
+
+    @PostMapping("/find-path")
+    public String getPath(@RequestParam("student") Long studentId,
+                          @RequestParam("campus") Long campusId,
+                          @RequestParam("areaFrom") Long areaFromId,
+                          @RequestParam("areaTo") Long areaToId, Model model) {
+        if (studentId.equals(-1L) || campusId.equals(-1L) || areaToId.equals(-1L) || areaFromId.equals(-1L)) {
+            return "fragments/logic/logicInputs :: emptyResult";
+        }
+        List<AreaResponse> doors = areaFacade.findPath(studentId, campusId, areaFromId, areaToId);
+        String result = doorFacade.convertDoorsToPath(doors);
+        model.addAttribute("result", result);
+        return "fragments/logic/logicPath :: logicResultPathFragment";
     }
 
     @GetMapping("/door")

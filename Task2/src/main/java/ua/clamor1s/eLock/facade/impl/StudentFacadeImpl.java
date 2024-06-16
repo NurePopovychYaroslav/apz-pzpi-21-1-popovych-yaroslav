@@ -18,7 +18,6 @@ import ua.clamor1s.eLock.service.DoorService;
 import ua.clamor1s.eLock.service.GroupService;
 import ua.clamor1s.eLock.service.StudentService;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

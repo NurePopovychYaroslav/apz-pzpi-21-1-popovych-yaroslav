@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ua.clamor1s.eLock.dto.request.DoorPermissionRequest;
 import ua.clamor1s.eLock.dto.request.DoorRequest;
+import ua.clamor1s.eLock.dto.response.AreaResponse;
 import ua.clamor1s.eLock.dto.response.DoorPermissionResponse;
 import ua.clamor1s.eLock.dto.response.DoorResponse;
 import ua.clamor1s.eLock.entity.Area;
@@ -99,5 +100,12 @@ public class DoorFacadeImpl implements DoorFacade {
         Permission permission = permissionService.getById(permissionId);
 
         doorService.deleteDoorPermission(door, permission);
+    }
+
+    @Override
+    public String convertDoorsToPath(List<AreaResponse> areas) {
+        return areas.stream()
+                .map(area -> area.name() + "(" + area.id() + ")")
+                .collect(Collectors.joining("~>"));
     }
 }

@@ -7,11 +7,16 @@ import ua.clamor1s.eLock.dto.request.AreaRequest;
 import ua.clamor1s.eLock.dto.response.AreaResponse;
 import ua.clamor1s.eLock.entity.Area;
 import ua.clamor1s.eLock.entity.Campus;
+import ua.clamor1s.eLock.entity.Permission;
+import ua.clamor1s.eLock.entity.Student;
 import ua.clamor1s.eLock.facade.AreaFacade;
 import ua.clamor1s.eLock.service.AreaService;
 import ua.clamor1s.eLock.service.CampusService;
+import ua.clamor1s.eLock.service.DoorService;
+import ua.clamor1s.eLock.service.StudentService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -19,6 +24,8 @@ import java.util.stream.Collectors;
 public class AreaFacadeImpl implements AreaFacade {
     private final CampusService campusService;
     private final AreaService areaService;
+    private final StudentService studentService;
+    private final DoorService doorService;
 
     @Transactional(readOnly = true)
     @Override
@@ -52,5 +59,18 @@ public class AreaFacadeImpl implements AreaFacade {
         Area area = areaService.getAreaById(areaId);
         area = areaService.deleteArea(area);
         return areaService.convertAreaToAreaResponse(area);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<AreaResponse> findPath(Long studentId, Long campusId, Long areaFromId, Long areaToId) {
+        Student student = studentService.getStudentById(studentId);
+        Campus campus = campusService.getCampusById(campusId);
+        Area areaFrom = areaService.getAreaById(areaFromId);
+        Area areaTo = areaService.getAreaById(areaToId);
+        Set<Permission> studentPermissions = student.getGroups().stream()
+                .flatMap(group -> group.getPermissions().stream())
+                .collect(Collectors.toSet());
+        return doorService.getDoorsPath(areaFrom, areaTo, studentPermissions);
     }
 }

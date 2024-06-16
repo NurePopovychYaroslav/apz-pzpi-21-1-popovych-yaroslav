@@ -1,19 +1,26 @@
 package ua.clamor1s.eLock.facade.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ua.clamor1s.eLock.dto.request.StudentGroupRequest;
 import ua.clamor1s.eLock.dto.request.StudentRequest;
 import ua.clamor1s.eLock.dto.response.StudentGroupResponse;
 import ua.clamor1s.eLock.dto.response.StudentResponse;
+import ua.clamor1s.eLock.entity.Door;
 import ua.clamor1s.eLock.entity.Group;
+import ua.clamor1s.eLock.entity.Permission;
 import ua.clamor1s.eLock.entity.Student;
 import ua.clamor1s.eLock.facade.StudentFacade;
+import ua.clamor1s.eLock.service.DoorService;
 import ua.clamor1s.eLock.service.GroupService;
 import ua.clamor1s.eLock.service.StudentService;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,6 +29,7 @@ public class StudentFacadeImpl implements StudentFacade {
 
     private final StudentService studentService;
     private final GroupService groupService;
+    private final DoorService doorService;
 
     @Transactional(readOnly = true)
     @Override
@@ -79,5 +87,19 @@ public class StudentFacadeImpl implements StudentFacade {
         Student student = studentService.getStudentById(studentId);
         Group group = groupService.getGroupById(groupId);
         return studentService.removeGroup(student, group);
+    }
+
+    @Transactional(readOnly = true)
+    @Retryable(retryFor = Exception.class, maxAttempts = 5, backoff = @Backoff(delay = 300))
+    @Override
+    public boolean isDoorAvailable(Long doorId, Long studentId) {
+        Student student = studentService.getStudentById(studentId);
+        Door door = doorService.getDoorById(doorId);
+
+        Set<Permission> doorPermissions = door.getPermissions();
+        Set<Permission> studentPermissions = student.getGroups().stream()
+                .flatMap(group -> group.getPermissions().stream())
+                .collect(Collectors.toSet());
+        return studentPermissions.stream().anyMatch(doorPermissions::contains);
     }
 }

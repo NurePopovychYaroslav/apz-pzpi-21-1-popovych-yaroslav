@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.2.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>ua.clamor1s</groupId>
 	<artifactId>eLock</artifactId>
@@ -17,6 +17,8 @@
 		<java.version>22</java.version>
 		<preliquibase.version>1.5.0</preliquibase.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<spring.retry.version>2.0.6</spring.retry.version>
+		<swagger.version>2.2.0</swagger.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -108,12 +110,12 @@
 		<dependency>
 			<groupId>org.springframework.retry</groupId>
 			<artifactId>spring-retry</artifactId>
-			<version>2.0.6</version>
+			<version>${spring.retry.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.2.0</version>
+			<version>${swagger.version}</version>
 		</dependency>
 	</dependencies>
 

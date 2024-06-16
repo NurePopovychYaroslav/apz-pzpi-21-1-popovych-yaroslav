@@ -10,14 +10,12 @@
         </div>
         <div class="col-md-4">
             <label for="areaFrom" class="form-label">From</label>
-<!--            <input type="text" class="form-control" id="validationDefault02" name="from" required>-->
             <select id="areaFrom" name="areaFrom">
                 <option th:each="i : ${areas}" th:value="${i.id}" th:text="${i.id + '->' + i.name}"></option>
             </select>
         </div>
         <div class="col-md-4">
             <label for="areaTo" class="form-label">To</label>
-<!--            <input type="text" class="form-control" id="validationDefault03" name="to" required>-->
             <select id="areaTo" name="areaTo">
                 <option th:each="i : ${areas}" th:value="${i.id}" th:text="${i.id + '->' + i.name}"></option>
             </select>
